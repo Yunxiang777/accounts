@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>記帳本列表</title>
+    <link rel="stylesheet" href="/stylesheets/list.css">
+</head>
+<body>
+    <div class="container">
+        <h1>記帳本</h1>
+        <ul id="transaction-list">
+            <% if (accounts.length > 0) { %>
+                <% accounts.forEach(function(account) { %>
+                    <li>
+                        <span class="left-text">
+                            <%= account.positiveOrNegative === 'positive' ? '收入' : '支出' %>
+                        </span>
+                        <span class="description"><%= account.description %></span>
+                        <span class="description"><%= new Date(account.date).toISOString().split('T')[0] %></span>
+                        <span class="amount">
+                            NT$ <%= account.positiveOrNegative === 'positive' ? '' : '-' %><%= account.amount %>
+                        </span>
+                        <button class="delete-btn" id="delete-<%= account._id %>" onclick="confirmDelete('<%= account._id %>')">X</button>
+                    </li>
+                <% }); %>
+            <% } else { %>
+                <li>目前沒有記錄。</li>
+            <% } %>
+        </ul>
+
+        <!-- 總計計算 -->
+        <h3>總計 : NT$ 
+            <% let totalAmount = accounts.reduce((sum, account) => { 
+                return sum + (account.positiveOrNegative === 'positive' ? account.amount : -account.amount); 
+            }, 0); %>
+            <%= totalAmount %>
+            <a href="/account/create">記帳</a>
+        </h3>
+    </div>
+
+    <script>
+        function confirmDelete(accountId) {
+            const confirmDelete = confirm("確定要刪除此筆交易嗎？");
+            if (confirmDelete) {
+                // 發送刪除請求
+                fetch(`/account/delete/${accountId}`, {
+                    method: 'DELETE',
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert("刪除成功");
+                    location.reload();
+                })
+                .catch(error => {
+                    alert("刪除失敗：" + error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡單記帳本</title>
+    <link rel="stylesheet" href="/stylesheets/create.css">
+</head>
+<body>
+    <div class="container">
+        <h1>記帳本</h1>
+
+        <form method="POST" action="/account/create">
+            <!-- 描述欄位 -->
+            <div class="input-group">
+                <label for="description">描述：</label>
+                <input type="text" name="description" placeholder="輸入項目描述" required>
+            </div>
+
+            <!-- 金額欄位 -->
+            <div class="input-group">
+                <label for="amount">金額：</label>
+                <input type="number" name="amount" placeholder="輸入金額" required>
+            </div>
+
+            <!-- 日期欄位 -->
+            <div class="input-group">
+                <label for="date">日期：</label>
+                <input type="date" name="date" required>
+            </div>
+
+            <!-- 支出或收入選擇欄位 -->
+            <div class="input-group">
+                <label for="positiveOrNegative">選擇支出或收入：</label>
+                <select name="positiveOrNegative" required class="positiveOrNegative">
+                    <option value="1">收入</option>
+                    <option value="-1">支出</option>
+                </select>
+            </div>
+
+            <button type="submit">新增交易</button> 
+            <a href="/account">帳本</a>
+        </form>
+        <form action="/logout" method="POST">
+            <button type="submit">登出</button>
+        </form>
+    </div>
+</body>
+</html>
